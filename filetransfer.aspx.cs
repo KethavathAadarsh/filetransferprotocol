@@ -1,31 +1,18 @@
-using System;
-using System.IO;
-using System.Web;
+string sourceFilePath = Request.Form["sourceFilePath"];
+string destinationFilePath = Request.Form["destinationFilePath"];
+string ftpServerAddress = "ftp://example.com";
+string ftpUsername = "username";
+string ftpPassword = "password";
 
-public partial class filetransfer : System.Web.UI.Page
+FtpWebRequest request = (FtpWebRequest)WebRequest.Create(ftpServerAddress + "/" + destinationFilePath);
+request.Method = WebRequestMethods.Ftp.UploadFile;
+request.Credentials = new NetworkCredential(ftpUsername, ftpPassword);
+
+using (Stream fileStream = File.OpenRead(sourceFilePath))
+using (Stream ftpStream = request.GetRequestStream())
 {
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        // Retrieve the source and destination file paths from the POST request
-        string sourceFilePath = Request.Form["sourceFilePath"];
-        string destinationFilePath = Request.Form["destinationFilePath"];
-
-        try
-        {
-            // Copy the file from the source path to the destination path
-            File.Copy(sourceFilePath, destinationFilePath, true);
-
-            // Return a success response
-            Response.StatusCode = 200;
-        }
-        catch (Exception ex)
-        {
-            // Return an error response with the exception message
-            Response.StatusCode = 500;
-            Response.Write(ex.Message);
-        }
-
-        // End the response
-        Response.End();
-    }
+    fileStream.CopyTo(ftpStream);
 }
+
+FtpWebResponse response = (FtpWebResponse)request.GetResponse();
+response.Close();
