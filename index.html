@@ -2,8 +2,21 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>My Website</title>
+    <title>File Transfer Utility</title>
   </head>
+  <body>
+    <h1>File Transfer Utility</h1>
+
+    <form action="filetransfer.aspx" method="post">
+        <label for="sourceFilePath">Source file path:</label>
+        <input type="text" id="sourceFilePath" name="sourceFilePath"><br>
+
+        <label for="destinationFilePath">Destination file path:</label>
+        <input type="text" id="destinationFilePath" name="destinationFilePath"><br>
+
+        <button type="submit">Transfer File</button>
+    </form>
+</body>
   <body>
     <h1>Hello, World!</h1>
     <p>This is my website.</p>
